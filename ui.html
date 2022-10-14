@@ -1,0 +1,29 @@
+<h2>Rectangle Creator</h2>
+<p>Count: <input id="count" value="5"></p>
+<button id="create">Create</button>
+<button id="cancel">Cancel</button>
+<br />
+<h2>Opacity controller</h2>
+<p>Opacity: <input id="opacity" value="0"></p>
+<button id="confirm">Confirm</button>
+<button id="cancel">Cancel</button>
+<script>
+
+document.getElementById('create').onclick = () => {
+  const textbox = document.getElementById('count');
+  const count = parseInt(textbox.value, 10);
+  parent.postMessage({ pluginMessage: { type: 'create-rectangles', count } }, '*')
+}
+
+document.getElementById('cancel').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
+}
+
+document.getElementById('confirm').onclick = () => {
+  const textbox = document.getElementById('opacity');
+  console.log(textbox.value);
+  const opacity = 0.5;
+  parent.postMessage({ pluginMessage: { type: 'opacity-change', opacity } }, '*')
+}
+
+</script>
