@@ -1,16 +1,18 @@
 {
-  "name": "figma-to-jsx-plugin",
+  "name": "figma-plugin-export-jsx",
   "version": "1.0.0",
   "description": "Your Figma Plugin",
-  "main": "code.js",
+  "main": "dist/code.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "watch": "npm run build -- --watch"
+    "watch": "npm run build -- --watch",
+    "postbuild": "cp src/ui.html dist/ui.html",
+    "prewatch": "echo hello"
   },
-  "author": "",
-  "license": "",
+  "author": "sam.rho",
+  "license": "MIT",
   "devDependencies": {
     "@figma/plugin-typings": "^1.53.0",
-    "typescript": "*"
+    "typescript": "^4.8.4"
   }
 }

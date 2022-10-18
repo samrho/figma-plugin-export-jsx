@@ -2,11 +2,14 @@
   "compilerOptions": {
     "target": "es6",
     "lib": ["es2016"],
+    "rootDir": "src",
+    "outDir": "dist",
     "strict": true,
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/@figma"
     ],
     "noImplicitAny": false
-  }
+  },
+  "include": ["src/**/*"]
 }
