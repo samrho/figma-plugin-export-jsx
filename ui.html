@@ -1,29 +1,28 @@
-<h2>Rectangle Creator</h2>
-<p>Count: <input id="count" value="5"></p>
-<button id="create">Create</button>
-<button id="cancel">Cancel</button>
-<br />
-<h2>Opacity controller</h2>
-<p>Opacity: <input id="opacity" value="0"></p>
-<button id="confirm">Confirm</button>
-<button id="cancel">Cancel</button>
+<h2>Info</h2>
+<div id="root"></div>
+
 <script>
+  const traverse = (data) => {
+    if (Array.isArray(data)) {
+      return data.map((item, index) => traverse({ [index]: item })).join('');
+    } else if (typeof data === 'object') {
+      const temp = Object.entries(data)
+        .map(([key, value]) => `<li><strong>${key}:</strong> ${traverse(value)}</li>`)
+        .join('');
 
-document.getElementById('create').onclick = () => {
-  const textbox = document.getElementById('count');
-  const count = parseInt(textbox.value, 10);
-  parent.postMessage({ pluginMessage: { type: 'create-rectangles', count } }, '*')
-}
+      return `<ul>${temp}</ul>`;
+    } else {
+      return data;
+    }
+  }
 
-document.getElementById('cancel').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
-}
+  window.addEventListener('message', (event) => {
+    const $root = document.querySelector('#root')
 
-document.getElementById('confirm').onclick = () => {
-  const textbox = document.getElementById('opacity');
-  console.log(textbox.value);
-  const opacity = 0.5;
-  parent.postMessage({ pluginMessage: { type: 'opacity-change', opacity } }, '*')
-}
-
+    if (event.data.pluginMessage.type === 'empty') {
+      $root.innerHTML = '<p>node를 선택해 주세요.</p>';
+    } else if (event.data.pluginMessage.type === 'tree') {
+      $root.innerHTML = traverse(event.data.pluginMessage.data);
+    }
+  })
 </script>

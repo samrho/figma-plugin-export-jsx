@@ -8,21 +8,42 @@ const run = () => {
     figma.ui.postMessage({
       type: 'empty'
     })
-    console.log('empty');
+
     return;
   }
   
+  const currentSelection = figma.currentPage.selection[0];
 
+  const xs3=figma.root.findOne(node => {
+    return node.name === 'xs=3'
+  })
+  console.log({xs3});
+  
   parentId = figma.currentPage.selection[0].parent?.id ?? '';
 
-  let result = '';
-
-  console.log(figma.currentPage);
-  console.log(figma.currentPage.selection);
-  console.log(figma.currentPage.selection[0]);
-  console.log(figma.currentPage.selection[0].parent);
+  if (
+    'layoutAlign' in currentSelection && 
+    'layoutMode' in currentSelection
+  ) {
+    console.log(currentSelection.type);
+    figma.ui.postMessage({
+      type: 'tree',
+      data: {
+        x: currentSelection.x,
+        y: currentSelection.y,
+        name: currentSelection.name,
+        width: currentSelection.width,
+        height: currentSelection.height,
+        layoutAlign: currentSelection.layoutAlign,
+        layoutMode: currentSelection.layoutMode,
+        layoutPositioning: currentSelection.layoutPositioning,
+        constraintsHorizontal: currentSelection.constraints.horizontal,
+        constraintsVertical: currentSelection.constraints.vertical,
+        layoutGrids: currentSelection.layoutGrids,
+        color: currentSelection.fills,
+    }});
+  }
 }
-
 
 figma.on("selectionchange", () => {
   console.log('run');
@@ -35,7 +56,6 @@ figma.on("run", () => {
 })
 
 figma.ui.onmessage = msg => {
-  console.log('latest');
   const {editorType} = figma;
   console.log({msg, root: figma.root.children});
 
@@ -48,20 +68,6 @@ figma.ui.onmessage = msg => {
   // keep running, which shows the cancel button at the bottom of the screen.
   figma.closePlugin();
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
